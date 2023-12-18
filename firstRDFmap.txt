@@ -1,0 +1,59 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.com/#> .
+@base <http://example.com/#> .
+
+<#TriplesMap1> rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/Renssit0/recetas/main/recetas.json" ;
+    rml:referenceFormulation ql:JSONPath ;
+    rml:iterator "$.*"
+] ;
+
+rr:subjectMap [
+    rr:termType rr:IRI ;
+    rr:template "http://example.com/{receta}" ;
+    rr:class ex:Receta
+] ;
+
+rr:predicateObjectMap [
+    rr:predicate  ex:tieneDescripcion;
+    rr:objectMap [ 
+        rml:reference "descripcion" ;
+        rr:termType rr:Literal ;
+    ]
+] ;
+rr:predicateObjectMap [
+    rr:predicate  ex:tieneCategoria;
+    rr:objectMap [ 
+        rml:reference "categoria" ;
+        rr:termType rr:Literal ;
+    ]
+] ;
+rr:predicateObjectMap [
+    rr:predicate  ex:tieneEnlace;
+    rr:objectMap [ 
+        rml:reference "enlace" ;
+        rr:termType rr:Literal ;
+    ]
+] ;
+rr:predicateObjectMap [
+    rr:predicate  ex:tieneIngredientes;
+    rr:objectMap [ 
+        rml:reference "ingredientes" ;
+        rml:iterator [
+            rml:iteratorList "value" ; # assuming "value" is the property containing the list
+            rr:iterator rr:ListIterator ;
+            rr:logicalTable [ rml:source "https://raw.githubusercontent.com/Renssit0/recetas/main/recetas.json" ; rml:referenceFormulation ql:JSONPath ] ;
+            rr:subjectMap [
+                rr:template "http://example.com/{receta}/ingredientes/{value}" ;
+                rr:class ex:Ingrediente
+            ] ;
+            rr:predicateObjectMap [
+                rr:predicate  ex:tieneNombre; # assuming a property "nombre" in each ingredient
+                rr:objectMap [ rml:reference "value" ; rr:termType rr:Literal ; ]
+            ]
+        ]
+    ]
+] .
