@@ -1,0 +1,60 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org#> .
+@prefix data: <http://example.org/Dia/> .
+@base <http://example.org/Dia/> .
+
+<#TriplesMap0> rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/Renssit0/recetas/main/datasets/dia.csv" ;
+    rml:referenceFormulation ql:CSV;
+] ;
+
+rr:subjectMap [
+    rr:termType rr:IRI ;
+    rr:template "http://example.org/Dia/{name}" ;
+    rr:class :Venta
+] ;
+
+rr:predicateObjectMap [
+    rr:predicate :nombre;
+    rr:objectMap [
+        rml:reference 'name';
+        rr:termType rr:Literal ;
+    ]
+] ;
+rr:predicateObjectMap [
+    rr:predicate :precio;
+    rr:objectMap [
+        rml:reference 'reference_price';
+        rr:termType rr:Literal ;
+    ]
+].
+
+<#TriplesMap1> rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/Renssit0/recetas/main/datasets/dia.csv" ;
+    rml:referenceFormulation ql:CSV;
+] ;
+
+rr:subjectMap [
+    rr:termType rr:IRI ;
+    rr:template "http://example.org/Dia" ;
+    rr:class :Supermercado
+] ;
+
+
+rr:predicateObjectMap [
+    rr:predicate :nombre;
+    rr:objectMap [
+        rr:constant 'Dia';
+        rr:termType rr:Literal ;
+    ]
+] ;
+rr:predicateObjectMap [
+    rr:predicate :vende;
+    rr:objectMap [
+        rr:parentTriplesMap <#TriplesMap0>;
+        rr:termType rr:IRI;
+    ]
+] .
