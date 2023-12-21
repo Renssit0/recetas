@@ -1,0 +1,31 @@
+import json
+import requests
+
+json_url = 'https://raw.githubusercontent.com/Renssit0/recetas/main/datasets/recetas.json'
+response = requests.get(json_url)
+recipes = response.json()
+
+unique_ingredients = set()
+for recipe in recipes:
+    ingredients = recipe.get('ingredientes', [])
+    unique_ingredients.update(ingredients)
+
+from rdflib import Graph, Namespace, URIRef, Literal, RDF
+from urllib.parse import quote
+
+ex = Namespace("http://example.org#")
+
+g = Graph()
+
+
+with open("ingredientes_recetas.txt", "w") as file:
+    for ingredient_name in unique_ingredients:
+
+        ingredient_uri = URIRef("http://example.com/" + quote(ingredient_name))
+
+        g.add((ingredient_uri, RDF.type, ex.Ingrediente))
+        g.add((ingredient_uri, ex.nombre, Literal(ingredient_name)))
+
+        serialized_result = f"{ingredient_uri} a <{ex}Ingrediente>.\n\t<{ex}nombre> \"{ingredient_name}\""
+
+        file.write(serialized_result + "\n\n")
