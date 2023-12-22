@@ -19,6 +19,14 @@ rr:subjectMap [
 ] ;
 
 rr:predicateObjectMap [
+    rr:predicate  :nombre ;
+    rr:objectMap [ 
+        rml:reference "receta";
+        rr:termType rr:Literal ;
+    ]
+] ;
+
+rr:predicateObjectMap [
     rr:predicate  :descripcion;
     rr:objectMap [ 
         rml:reference "descripcion" ;
@@ -39,6 +47,8 @@ rr:predicateObjectMap [
         rr:termType rr:Literal ;
     ]
 ] ;
+
+
 rr:predicateObjectMap [
     rr:predicate :tieneIngrediente;
     rr:objectMap [
